@@ -187,7 +187,7 @@ class AccountControllerTest {
 		            .andExpect(status().isOk()).andReturn();
 		  	
 		  	String content = result.getResponse().getContentAsString();
-		    assertEquals(content,"true");
+		    assertEquals(content,"Account deleted correctly!");
 	  }
 	  
 

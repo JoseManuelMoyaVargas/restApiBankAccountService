@@ -5,6 +5,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,9 +45,15 @@ public class AccountController {
 		return accountService.getAccount(id);
     }
 	
-	@DeleteMapping("/remove/{id}")
+	/*@DeleteMapping("/remove/{id}")
 	public Boolean remove(@PathVariable Integer id){
 		return accountService.deleteAccount(id);
+    }*/
+	
+	@DeleteMapping("/remove/{id}")
+	public ResponseEntity<String> remove(@PathVariable Integer id){
+		accountService.deleteAccount(id);
+		return new ResponseEntity<>("Account deleted correctly!", HttpStatus.OK);
     }
 	
 	
