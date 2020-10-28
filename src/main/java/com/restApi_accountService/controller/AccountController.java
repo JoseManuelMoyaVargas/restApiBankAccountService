@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.restApi_accountService.model.Account;
 import com.restApi_accountService.services.AccountService;
@@ -21,6 +23,7 @@ import com.restApi_accountService.services.AccountService;
 @RestController
 @RequestMapping("account")
 @CrossOrigin(origins="*")
+//@CrossOrigin(origins = "http://localhost:8000/")
 public class AccountController {
 	@Autowired
 	private AccountService accountService;
@@ -38,6 +41,11 @@ public class AccountController {
 	@GetMapping("/edit/{id}")
     public Account edit(@PathVariable Integer id){
 		return accountService.getAccount(id);
+    }
+	
+	@DeleteMapping("/remove/{id}")
+	public Boolean remove(@PathVariable Integer id){
+		return accountService.deleteAccount(id);
     }
 	
 	

@@ -1,5 +1,6 @@
 package com.restApi_accountService.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,9 +23,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.MimeTypeUtils;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.restApi_accountService.model.Account;
@@ -162,6 +165,29 @@ class AccountControllerTest {
 		    //then
 		    mvc.perform(get("/account/edit/10"))
 		            .andExpect(status().isBadRequest());
+	  }
+	  
+	  @Test
+	  void deleteAccountDoesNotExist_thenReturnStatus400() throws Exception{
+		  	//given
+		  	Mockito.when(mockAccountService.deleteAccount(10)).thenThrow(AccountNotFoundException.class);
+		    //when
+		    //then
+		    mvc.perform(delete("/account/remove/10"))
+		            .andExpect(status().isBadRequest());
+	  }
+	  
+	  @Test
+	  void deleteAccountExist() throws Exception{
+		  	//given
+		  	Mockito.when(mockAccountService.deleteAccount(10)).thenReturn(true);
+		    //when
+		    //then
+		  	MvcResult result=mvc.perform(delete("/account/remove/10"))
+		            .andExpect(status().isOk()).andReturn();
+		  	
+		  	String content = result.getResponse().getContentAsString();
+		    assertEquals(content,"true");
 	  }
 	  
 
