@@ -41,8 +41,7 @@ public class IntegrationTest {
 	private AccountService accountService;
 	
 	@Test
-	/* This test in executed the last one by Spring because of the name we use.*/
-	void test_find_all_accounts() throws Exception {
+	void test_find_accounts() throws Exception {
 		
 		//when
 	  	Account acc1 = new Account();
@@ -65,7 +64,7 @@ public class IntegrationTest {
 		MvcResult result=mvc.perform(get("/account/list")
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk())
-			      .andExpect(jsonPath("$", Matchers.hasSize(5)))
+			      .andExpect(jsonPath("$", Matchers.hasSize(3)))
 			      .andExpect(jsonPath("$[0].name", Matchers.is("Pablo"))).andReturn();
 		
 	}
@@ -200,6 +199,34 @@ public class IntegrationTest {
 		  	String content = result.getResponse().getContentAsString();
 		    assertEquals(content,"Account deleted correctly!");
 	  }
+	
+	@Test
+      void save_account_setting_id() {
+		//given
+		Account acc1 = new Account();
+		acc1.setBalance(new BigDecimal(20000));
+		acc1.setCurrency(Currency.getInstance("EUR"));
+		acc1.setName("John");
+		acc1.setTreasury(false);
+		accountService.saveAccount(acc1);
+		
+		//when
+		int size_accounts =  accountService.getAccounts().size();
+		Account foundAccount = accountService.getAccounts().get(size_accounts-1);
+		Account acc2 = new Account();
+		acc2.setId(foundAccount.getId());
+		acc2.setBalance(new BigDecimal(30000));
+		acc2.setCurrency(Currency.getInstance("USD"));
+		acc2.setName("John 2");
+		acc2.setTreasury(true);
+		accountService.saveAccount(acc2);
+		
+		//then
+		Account foundAccount2 = accountService.getAccount(foundAccount.getId());
+		assertEquals("John",foundAccount2.getName());
+		assertEquals(false,foundAccount2.getTreasury());
+		
+	}
 	
 	
 	
