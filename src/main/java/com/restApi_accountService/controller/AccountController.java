@@ -45,17 +45,11 @@ public class AccountController {
 		return accountService.getAccount(id);
     }
 	
-	/*@DeleteMapping("/remove/{id}")
-	public Boolean remove(@PathVariable Integer id){
-		return accountService.deleteAccount(id);
-    }*/
-	
 	@DeleteMapping("/remove/{id}")
 	public ResponseEntity<String> remove(@PathVariable Integer id){
 		accountService.deleteAccount(id);
 		return new ResponseEntity<>("Account deleted correctly!", HttpStatus.OK);
     }
-	
-	
+
 	
 }

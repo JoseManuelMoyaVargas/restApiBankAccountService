@@ -22,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.MimeTypeUtils;
@@ -37,7 +38,7 @@ import restApi_accountService.exceptions.AccountNotFoundException;
 @AutoConfigureMockMvc
 @SpringBootTest
 class AccountControllerTest {
-
+	  /* We test here AccountController and ExceptionHandlerController */
 	  @Autowired
 	  private MockMvc mvc;
 
@@ -46,6 +47,7 @@ class AccountControllerTest {
 	  
 	  @MockBean
 	  private AccountService mockAccountService;
+	  
 	  
 	  @Test
 	  void find_all_accounts() throws Exception {
@@ -96,6 +98,7 @@ class AccountControllerTest {
 		acc1.setTreasury(false);
 	    //when
 	    String body = objectMapper.writeValueAsString(acc1);
+	    Mockito.when(mockAccountService.saveAccount(acc1)).thenThrow(HttpMessageNotReadableException.class);
 	    //then
 	    mvc.perform(post("/account/save")
 	            .contentType("application/json")
@@ -112,6 +115,7 @@ class AccountControllerTest {
 		acc1.setTreasury(false);
 	    //when
 	    String body = objectMapper.writeValueAsString(acc1);
+	    Mockito.when(mockAccountService.saveAccount(acc1)).thenThrow(HttpMessageNotReadableException.class);
 	    //then
 	    mvc.perform(post("/account/save")
 	            .contentType("application/json")
@@ -130,6 +134,8 @@ class AccountControllerTest {
 			  jo.put("treasury", false);
 			
 			  String body = jo.toString();
+			  Mockito.when(mockAccountService.saveAccount(Mockito.any(Account.class))).thenThrow(HttpMessageNotReadableException.class);
+
 		    //when
 		    //then
 		    mvc.perform(post("/account/save")
@@ -149,7 +155,9 @@ class AccountControllerTest {
 			  jo.put("treasury", false);
 			
 			  String body = jo.toString();
+			  Mockito.when(mockAccountService.saveAccount(Mockito.any(Account.class))).thenThrow(HttpMessageNotReadableException.class);
 		    //when
+			  
 		    //then
 		    mvc.perform(post("/account/save")
 		            .contentType("application/json")
