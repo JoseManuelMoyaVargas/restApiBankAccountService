@@ -26,6 +26,10 @@ public class AccountService {
 			acc.setTreasury(false);
 		 }
 		 
+		 if(acc.getId()!=null) {
+			 acc.setId(null);
+		 }
+		 
 		 return accountRepo.save(acc);
 	}
 	public List<Account> getAccounts(){

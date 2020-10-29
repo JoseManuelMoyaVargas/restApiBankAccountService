@@ -133,6 +133,31 @@ class AccountServiceTest {
 	}
 	
 	
+	@Test
+	public void saveAccount_setting_id() {
+		
+		//given
+		Account acc2 = new Account();
+		acc2.setId(50);
+		acc2.setName("Marcos");
+		acc2.setBalance(new BigDecimal(200000));
+		acc2.setTreasury(true);
+		acc2.setCurrency(Currency.getInstance("EUR"));
+		Mockito.when(accountRepository.save(acc2)).thenReturn(acc2);
+		//when
+		accountService.saveAccount(acc2);
+		
+		//then (the account has been modified)
+		assertEquals(acc2.getId(),null);
+		assertEquals(acc2.getName(),"Marcos");
+		assertEquals(acc2.getBalance(),new BigDecimal(200000));
+		assertEquals(acc2.getTreasury(),true);
+		assertEquals(acc2.getCurrency(),Currency.getInstance("EUR"));
+	}
+	
+	
+	
+	
 	
 	
 	

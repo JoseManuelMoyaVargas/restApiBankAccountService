@@ -65,7 +65,7 @@ public class IntegrationTest {
 		MvcResult result=mvc.perform(get("/account/list")
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk())
-			      .andExpect(jsonPath("$", Matchers.hasSize(4)))
+			      .andExpect(jsonPath("$", Matchers.hasSize(5)))
 			      .andExpect(jsonPath("$[0].name", Matchers.is("Pablo"))).andReturn();
 		
 	}

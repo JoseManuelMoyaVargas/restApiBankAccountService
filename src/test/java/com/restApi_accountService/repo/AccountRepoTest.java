@@ -26,7 +26,8 @@ class AccountRepoTest {
 	    public void init() {
 			//given
 			Account acc1 = new Account();
-			acc1.setBalance(new BigDecimal(100.0)); acc1.setCurrency(Currency.getInstance("USD"));
+			acc1.setBalance(new BigDecimal(100.0)); 
+			acc1.setCurrency(Currency.getInstance("USD"));
 			acc1.setName("Pablo");acc1.setTreasury(false);
 			
 			Account acc2 = new Account();
@@ -90,6 +91,60 @@ class AccountRepoTest {
 			assertEquals(3,foundAccounts.size());
 		}
 		
+		
+		@Test
+		public void saveAccount_setting_id() {
+			
+			//given
+			Account ac = accountRepository.findAll().get(0);
+			Integer id_ac = ac.getId();
+			String name_ac = ac.getName();
+			BigDecimal balance_ac = ac.getBalance();
+			Boolean treasury_ac = ac.getTreasury();
+			Currency currency_ac = ac.getCurrency();
+			
+			Account acc2 = new Account();
+			acc2.setId(id_ac);
+			acc2.setName("Marcos");
+			acc2.setBalance(new BigDecimal(200000));
+			acc2.setTreasury(true);
+			acc2.setCurrency(Currency.getInstance("EUR"));
+			//when
+			accountRepository.save(acc2);
+			Account acc1 = accountRepository.findAccountById(id_ac);
+			
+			//then (the account has been modified)
+			assertEquals(acc1.getId(),id_ac);
+			assertEquals(acc1.getName(),"Marcos");
+			assertEquals(acc1.getBalance(),new BigDecimal(200000));
+			assertEquals(acc1.getTreasury(),true);
+			assertEquals(acc1.getCurrency(),Currency.getInstance("EUR"));
+	
+		}
+		@Test
+		public void saveAccount_not_setting_id() {
+			
+			//given
+			
+		
+			Account acc2 = new Account();
+			acc2.setId(null);
+			acc2.setName("Marcos");
+			acc2.setBalance(new BigDecimal(200000));
+			acc2.setTreasury(true);
+			acc2.setCurrency(Currency.getInstance("EUR"));
+			//when
+			accountRepository.save(acc2);
+			int size_list=accountRepository.findAll().size();
+			Account found_acc = accountRepository.findAll().get(size_list-1);
+			
+			//then (the account has been modified)
+			assertEquals(acc2.getName(),found_acc.getName());
+			assertEquals(acc2.getBalance(),found_acc.getBalance());
+			assertEquals(acc2.getTreasury(),found_acc.getTreasury());
+			assertEquals(acc2.getCurrency(),found_acc.getCurrency());
+	
+		}
 		
 		
 		
