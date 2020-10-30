@@ -135,7 +135,6 @@ class AccountServiceTest {
 	
 	@Test
 	public void saveAccount_setting_id() {
-		
 		//given
 		Account acc2 = new Account();
 		acc2.setId(50);
@@ -155,9 +154,56 @@ class AccountServiceTest {
 		assertEquals(acc2.getCurrency(),Currency.getInstance("EUR"));
 	}
 	
+	@Test
+	public void edit_account_exists_setting_treasury() {
+		//given
+		Account acc1 = new Account();
+		acc1.setId(50);
+		acc1.setName("Ana");
+		acc1.setBalance(new BigDecimal(100));
+		acc1.setTreasury(false);
+		acc1.setCurrency(Currency.getInstance("USD"));
+		
+		Account acc2 = new Account();
+		acc2.setId(50);
+		acc2.setName("Alexis");
+		acc2.setBalance(new BigDecimal(200));
+		acc2.setTreasury(true);
+		acc2.setCurrency(Currency.getInstance("EUR"));
+
+		Mockito.when(accountRepository.findAccountById(50)).thenReturn(acc1);
+		Mockito.when(accountRepository.save(acc1)).thenReturn(acc1);
+		//when
+		accountService.editAccount(acc2);
 	
+		//then (the account has been modified) without the treasury
+		assertEquals(acc1.getId(),50);
+		assertEquals(acc1.getName(),"Alexis");
+		assertEquals(acc1.getBalance(),new BigDecimal(200));
+		assertEquals(acc1.getTreasury(),false);//This has not change
+		assertEquals(acc1.getCurrency(),Currency.getInstance("EUR"));
+		
+	}
 	
-	
+	@Test
+	void editAccount_that_not_exists() {
+		//given
+		Account acc1 = new Account();
+		acc1.setId(50);
+		acc1.setName("Ana");
+		acc1.setBalance(new BigDecimal(100));
+		acc1.setTreasury(false);
+		acc1.setCurrency(Currency.getInstance("USD"));
+		
+		Mockito.when(accountRepository.findById(1)).thenReturn(null);
+		//when
+		AccountNotFoundException ex=
+				Assertions.assertThrows(AccountNotFoundException.class, () -> {
+					accountService.editAccount(acc1);		
+		});
+		//then
+		assertEquals(ex.getMessage(),"Account not found");
+	}
 	
 	
 	

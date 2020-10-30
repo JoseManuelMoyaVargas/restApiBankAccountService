@@ -11,10 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-
-
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter @Setter @RequiredArgsConstructor
 public class Account {
 	@Id
 	@GeneratedValue
@@ -39,7 +41,8 @@ public class Account {
 	
 	@OneToMany(mappedBy = "accDestination")
     Set<Transfer> transfersDestination;
-
+	/*
+	 * WE COMMENT THIS BECAUSE WE HAVE ADDED LOMBOK THAT DOES IT FOR US.
 	public Integer getId() {
 		return id;
 	}
@@ -78,5 +81,5 @@ public class Account {
 
 	public void setTreasury(Boolean treasury) {
 		this.treasury = treasury;
-	}
+	}*/
 }

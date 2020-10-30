@@ -40,8 +40,8 @@ public class AccountController {
 		return accountService.getAccounts();
 	}
 	
-	@GetMapping("/edit/{id}")
-    public Account edit(@PathVariable Integer id){
+	@GetMapping("/get_account/{id}")
+    public Account get_account(@PathVariable Integer id){
 		return accountService.getAccount(id);
     }
 	
@@ -50,6 +50,15 @@ public class AccountController {
 		accountService.deleteAccount(id);
 		return new ResponseEntity<>("Account deleted correctly!", HttpStatus.OK);
     }
+	
+	@PostMapping("/edit")
+	public ResponseEntity<String> editAccount(@Valid @RequestBody Account account) {
+		accountService.editAccount(account);
+		return new ResponseEntity<>("Account edited correctly!", HttpStatus.OK);
+	}
+	
+	
+	
 
 	
 }

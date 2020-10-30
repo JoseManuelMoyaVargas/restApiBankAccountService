@@ -167,7 +167,7 @@ public class IntegrationTest {
 		  	//given
 		    //when
 		    //then
-		    mvc.perform(get("/account/edit/10"))
+		    mvc.perform(get("/account/get_account/10"))
 		            .andExpect(status().isBadRequest());
 	  }
 	

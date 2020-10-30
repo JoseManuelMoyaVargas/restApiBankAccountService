@@ -171,7 +171,7 @@ class AccountControllerTest {
 		  	Mockito.when(mockAccountService.getAccount(10)).thenThrow(AccountNotFoundException.class);
 		    //when
 		    //then
-		    mvc.perform(get("/account/edit/10"))
+		    mvc.perform(get("/account/get_account/10"))
 		            .andExpect(status().isBadRequest());
 	  }
 	  
@@ -186,7 +186,7 @@ class AccountControllerTest {
 	  }
 	  
 	  @Test
-	  void deleteAccountExist() throws Exception{
+	  void deleteAccountExists() throws Exception{
 		  	//given
 		  	Mockito.when(mockAccountService.deleteAccount(10)).thenReturn(true);
 		    //when
@@ -198,5 +198,26 @@ class AccountControllerTest {
 		    assertEquals(content,"Account deleted correctly!");
 	  }
 	  
+	  @Test
+	  void edit_accout_that_exists() throws Exception{
+		  	
+		    //given
+		    Account acc1 = new Account();
+		  	acc1.setId(1);
+			acc1.setBalance(new BigDecimal(100.0));
+			acc1.setCurrency(Currency.getInstance("USD"));
+			acc1.setTreasury(false);acc1.setName("Pablo");
+		
+			given(mockAccountService.editAccount(acc1)).willReturn(acc1);
+			String body = objectMapper.writeValueAsString(acc1);
+			
+			//when//then
+			MvcResult result=mvc.perform(post("/account/edit")
+		            .contentType(MediaType.APPLICATION_JSON)
+		            .content(body))
+		            .andExpect(status().isOk()).andReturn();
+			String content = result.getResponse().getContentAsString();
+		    assertEquals(content,"Account edited correctly!");
+	  }
 
 }

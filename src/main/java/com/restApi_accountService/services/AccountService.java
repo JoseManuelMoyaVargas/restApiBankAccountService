@@ -54,5 +54,22 @@ public class AccountService {
 		return true;
 	}
 	
+	public Account editAccount(Account acc) throws AccountNotFoundException {
+		/* If the account does not exist.*/
+		Integer id_account= acc.getId();
+		Account foundAccount = accountRepo.findAccountById(id_account);
+		if(foundAccount==null) {
+			throw new AccountNotFoundException();
+		}
+		/* If the account does exist.*/
+		
+		//Requirement : Treasury can not be edited so we only overrite the rest of fields.
+		foundAccount.setName(acc.getName());
+		foundAccount.setBalance(acc.getBalance());
+		foundAccount.setCurrency(acc.getCurrency());
+		
+		return accountRepo.save(foundAccount);
+	}
+	
 	
 }

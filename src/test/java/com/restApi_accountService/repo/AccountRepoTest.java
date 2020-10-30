@@ -125,8 +125,6 @@ class AccountRepoTest {
 		public void saveAccount_not_setting_id() {
 			
 			//given
-			
-		
 			Account acc2 = new Account();
 			acc2.setId(null);
 			acc2.setName("Marcos");
@@ -147,7 +145,6 @@ class AccountRepoTest {
 		}
 		
 		
-		
-	
+
 
 }
