@@ -41,7 +41,7 @@ public class IntegrationTest {
 	private AccountService accountService;
 	
 	@Test
-	void test_find_accounts() throws Exception {
+	void test_find_allaccounts() throws Exception {
 		
 		//when
 	  	Account acc1 = new Account();
@@ -64,8 +64,8 @@ public class IntegrationTest {
 		MvcResult result=mvc.perform(get("/account/list")
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk())
-			      .andExpect(jsonPath("$", Matchers.hasSize(3)))
-			      .andExpect(jsonPath("$[0].name", Matchers.is("Pablo"))).andReturn();
+			      .andExpect(jsonPath("$", Matchers.hasSize(4)))
+			      .andExpect(jsonPath("$[0].name", Matchers.is("Pablo Morales Vargas"))).andReturn();
 		
 	}
 	
@@ -227,6 +227,55 @@ public class IntegrationTest {
 		assertEquals(false,foundAccount2.getTreasury());
 		
 	}
+	
+	
+	@Test
+	  void edit_accout_that_exists() throws Exception{
+		  	
+		    //given
+			Account acc = new Account();
+			acc.setBalance(new BigDecimal(100.0));
+			acc.setCurrency(Currency.getInstance("USD"));
+			acc.setTreasury(true);
+			acc.setName("Pablo");
+			Account foundAccount = accountService.saveAccount(acc);
+			
+		
+			//when
+			foundAccount.setBalance(new BigDecimal(200.0));
+			foundAccount.setCurrency(Currency.getInstance("EUR"));
+			foundAccount.setTreasury(false);//we change this
+			foundAccount.setName("Pablo Morales Vargas");
+		
+			String body = objectMapper.writeValueAsString(foundAccount);
+			
+			//when//then
+			MvcResult result=mvc.perform(post("/account/edit")
+		            .contentType(MediaType.APPLICATION_JSON)
+		            .content(body))
+		            .andExpect(status().isOk()).andReturn();
+			String content = result.getResponse().getContentAsString();
+		    assertEquals(content,"Account edited correctly!");
+	  }
+	  
+	  @Test
+	  void edit_accout_that_not_exists() throws Exception{
+		 //given
+		  Account acc1 = new Account();
+		  acc1.setId(1);
+		  acc1.setBalance(new BigDecimal(100.0));
+		  acc1.setCurrency(Currency.getInstance("USD"));
+		  acc1.setTreasury(false);acc1.setName("Pablo");
+		  String body = objectMapper.writeValueAsString(acc1);
+		  
+		  //when
+		 //then
+		  mvc.perform(post("/account/edit")
+		            .contentType(MediaType.APPLICATION_JSON)
+		            .content(body))
+		            .andExpect(status().isBadRequest());
+	
+	  }
 	
 	
 	

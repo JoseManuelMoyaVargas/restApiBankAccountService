@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -56,6 +57,13 @@ public class AccountController {
 		accountService.editAccount(account);
 		return new ResponseEntity<>("Account edited correctly!", HttpStatus.OK);
 	}
+	
+	@GetMapping("/find_name")
+    public List<Account> find_by_name(@Param("searchInput") String searchInput){
+		//System.out.println(searchInput);
+		return accountService.find_by_name(searchInput);
+		
+    }
 	
 	
 	

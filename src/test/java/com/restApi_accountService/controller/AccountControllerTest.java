@@ -219,5 +219,24 @@ class AccountControllerTest {
 			String content = result.getResponse().getContentAsString();
 		    assertEquals(content,"Account edited correctly!");
 	  }
-
+	  
+	  @Test
+	  void edit_accout_that_not_exists() throws Exception{
+		 //given
+		  Account acc1 = new Account();
+		  acc1.setId(1);
+		  acc1.setBalance(new BigDecimal(100.0));
+		  acc1.setCurrency(Currency.getInstance("USD"));
+		  acc1.setTreasury(false);acc1.setName("Pablo");
+		  given(mockAccountService.editAccount(Mockito.any(Account.class))).willThrow(AccountNotFoundException.class);
+		  String body = objectMapper.writeValueAsString(acc1);
+		  
+		  //when
+		 //then
+		  mvc.perform(post("/account/edit")
+		            .contentType(MediaType.APPLICATION_JSON)
+		            .content(body))
+		            .andExpect(status().isBadRequest());
+	
+	  }
 }

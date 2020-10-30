@@ -71,5 +71,8 @@ public class AccountService {
 		return accountRepo.save(foundAccount);
 	}
 	
+	public List<Account> find_by_name(String name){
+		return accountRepo.findByName(name);
+	}
 	
 }
